@@ -1,0 +1,188 @@
+/* Footer Styles */
+footer {
+  background-color: #06213b;
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+  margin-top: 40px;
+}
+
+footer p {
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+footer nav {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+
+footer nav ul {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin: 0;
+}
+
+footer nav ul li {
+  margin: 0 10px;
+}
+
+footer nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+footer nav ul li a:hover {
+  color: #80c1ff;
+}
+
+/* // landing page css */
+body {
+  background-color: #1c929f;
+  /* padding: 0; */
+  /* padding-top: 60px; */
+  box-sizing: border-box;
+  min-height: 100vh; /* Make body at least the height of the viewport */
+  display: flex; /* Enable flexbox on the body */
+  flex-direction: column; /* Stack items vertically */
+  position: relative;
+}
+
+.landing-page {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1; /* Allow content to take up available space */
+}
+
+.left-section {
+  flex: 1;
+  padding: 20px;
+}
+
+.right-section {
+  flex: 1.2;
+  padding: 20px;
+}
+
+.app-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.header-info h1 {
+  font-size: 3.2rem;
+  color: #f8fafb;
+  margin-bottom: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.header-info p {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin-bottom: 25px;
+  line-height: 1.7;
+}
+
+.options-container {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.options-container div {
+  font-size: 18px;
+  color: #118502;
+}
+
+#login-btn,
+#register-btn {
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
+    background-color 0.3s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+#login-btn {
+  background-color: #ffffff;
+  color: #1c929f;
+  border: 1px solid #1c929f;
+}
+
+#login-btn:hover {
+  background-color: #fff;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: #1c929f;
+  border: 1px solid #1c929f;
+}
+
+#register-btn {
+  border: 1px solid #f9fbfe;
+  color: white;
+}
+
+#register-btn:hover {
+  background-color: #fbfffc;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: #1c929f;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .landing-page {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .left-section,
+  .right-section {
+    flex: none;
+    width: 100%;
+  }
+
+  .options-container {
+    flex-direction: column;
+  }
+
+  .login-btn,
+  .register-btn {
+    width: 100%;
+  }
+}
+
+/* task reports css */
+.card-title {
+  font-weight: bold;
+}
+.card-text {
+  font-size: 20px;
+}
+
+/* read css */
+#read-page > p {
+  color: #fff;
+}

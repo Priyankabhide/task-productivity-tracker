@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task and Productivity Tracker</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f9;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+      }
+      h1,
+      h2 {
+        text-align: center;
+        color: #4c51bf;
+        margin-bottom: 20px;
+      }
+      #taskForm {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        width: 90%;
+        max-width: 500px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #taskForm label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+        width: 100%;
+        text-align: left;
+      }
+      #taskForm input[type="text"],
+      #taskForm textarea {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+      #taskForm textarea {
+        resize: none;
+        height: 80px;
+      }
+      #taskForm button {
+        background-color: #4c51bf;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        max-width: 300px;
+      }
+      #taskForm button:hover {
+        background-color: #3840a3;
+      }
+      #taskList,
+      #productivityList {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        max-width: 700px;
+        margin-bottom: 20px;
+      }
+      #taskList h2,
+      #productivityList h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        text-align: left;
+      }
+
+      #taskList ul,
+      #productivityList ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      #taskList li,
+      #productivityList li {
+        background-color: #f9f9f9;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #eee;
+      }
+      #taskList li span {
+        margin-right: 10px;
+      }
+      #taskList li button {
+        background-color: #dc3545;
+        color: white;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: background-color 0.3s ease;
+      }
+      #taskList li button:hover {
+        background-color: #c82333;
+      }
+
+      .completed {
+        text-decoration: line-through;
+        color: #888;
+      }
+
+      @media (max-width: 600px) {
+        #taskForm {
+          width: 95%;
+        }
+        #taskList,
+        #productivityList {
+          width: 95%;
+        }
+        #taskForm input[type="text"],
+        #taskForm textarea {
+          width: calc(100% - 16px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Task and Productivity Tracker</h1>
+
+    <form id="taskForm">
+      <label for="taskName">Task Name:</label>
+      <input
+        type="text"
+        id="taskName"
+        name="taskName"
+        placeholder="Enter task name"
+        required
+      />
+      <label for="taskDescription">Task Description:</label>
+      <textarea
+        id="taskDescription"
+        name="taskDescription"
+        placeholder="Enter task description"
+      ></textarea>
+      <button type="submit">Add Task</button>
+    </form>
+
+    <div id="taskList">
+      <h2>Task List</h2>
+      <ul></ul>
+    </div>
+
+    <div id="productivityList">
+      <h2>Productivity Summary</h2>
+      <ul></ul>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        let tasks = [];
+
+        function addTask(event) {
+          event.preventDefault();
+
+          let taskName = $("#taskName").val();
+          let taskDescription = $("#taskDescription").val();
+
+          if (taskName.trim() === "") {
+            alert("Task name is required");
+            return;
+          }
+
+          let task = {
+            name: taskName,
+            description: taskDescription,
+            completed: false,
+            completionTime: null,
+          };
+
+          tasks.push(task);
+          displayTasks();
+          updateProductivity();
+          $("#taskName").val("");
+          $("#taskDescription").val("");
+        }
+
+        function deleteTask(index) {
+          tasks.splice(index, 1);
+          displayTasks();
+          updateProductivity();
+        }
+
+        function toggleComplete(index) {
+          tasks[index].completed = !tasks[index].completed;
+          if (tasks[index].completed) {
+            tasks[index].completionTime = new Date();
+          } else {
+            tasks[index].completionTime = null;
+          }
+          displayTasks();
+          updateProductivity();
+        }
+
+        function displayTasks() {
+          let taskList = $("#taskList ul");
+          taskList.empty();
+
+          tasks.forEach(function (task, index) {
+            let listItem = $("<li></li>")
+              .append(
+                $("<span></span>")
+                  .text(task.name)
+                  .toggleClass("completed", task.completed)
+              )
+              .append($("<span></span>").text(task.description));
+
+            let completeButton = $("<button></button>")
+              .text(task.completed ? "Undo" : "Complete")
+              .click(function () {
+                toggleComplete(index);
+              });
+
+            let deleteButton = $("<button></button>")
+              .text("Delete")
+              .click(function () {
+                deleteTask(index);
+              });
+
+            listItem.append(completeButton).append(deleteButton);
+            taskList.append(listItem);
+          });
+        }
+
+        function updateProductivity() {
+          let completedTasks = tasks.filter((task) => task.completed).length;
+          let totalTasks = tasks.length;
+          let productivityPercentage =
+            totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+
+          let productivityList = $("#productivityList ul");
+          productivityList.empty();
+
+          let summaryItem = $("<li></li>").text(
+            `Completed Tasks: ${completedTasks} / ${totalTasks}  (${productivityPercentage.toFixed(
+              2
+            )}%)`
+          );
+          productivityList.append(summaryItem);
+
+          tasks.forEach(function (task) {
+            if (task.completed) {
+              let completionTime = task.completionTime
+                ? task.completionTime.toLocaleString()
+                : "Unknown";
+              let taskItem = $("<li></li>").text(
+                `Task: ${task.name}, Completed on: ${completionTime}`
+              );
+              productivityList.append(taskItem);
+            }
+          });
+        }
+
+        $("#taskForm").submit(addTask);
+        displayTasks();
+        updateProductivity();
+      });
+    </script>
+  </body>
+</html>
